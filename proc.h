@@ -2,11 +2,15 @@
 #define PROC_H
 
 #include <linux/proc_fs.h>
+#include <linux/atomic.h>
 
 #define PROC_PAGE_SIZE 500
 
-unsigned int read_count;
-unsigned int write_count;
+// unsigned int read_count;
+// unsigned int write_count;
+atomic_t read_count = ATOMIC_INIT(0);
+atomic_t write_count = ATOMIC_INIT(0);
+
 struct proc_dir_entry* proc_file_entry;
 
 static ssize_t dev_proc_read(struct file* file, char __user *buffer, size_t count, loff_t *offset)

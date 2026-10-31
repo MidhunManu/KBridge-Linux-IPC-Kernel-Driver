@@ -71,7 +71,7 @@ static ssize_t kbridge_read(struct file *file, char __user *buffer, size_t lengt
 
     *offset += bytes_to_copy;
     mutex_unlock(&buffer_mtx);
-	++read_count;
+	atomic_inc(&read_count);
 
     return bytes_to_copy;
 }
@@ -95,7 +95,7 @@ static ssize_t kbridge_write(struct file* file, const char __user *buffer, size_
 
     *offset += bytes_to_copy;
     mutex_unlock(&buffer_mtx);
-	++write_count;
+	atomic_inc(&write_count);
 
     return bytes_to_copy;
 }
