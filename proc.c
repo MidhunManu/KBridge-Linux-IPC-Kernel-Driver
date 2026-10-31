@@ -1,12 +1,6 @@
 #include "proc.h"
 
-/* unsigned int read_count; */
-/* unsigned int write_count */;
-
-
-
 struct proc_dir_entry* proc_file_entry;
-
 
 ssize_t dev_proc_read(struct file* file, char __user *buffer, size_t count, loff_t *offset)
 {
