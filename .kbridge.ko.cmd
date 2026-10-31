@@ -1,1 +1,0 @@
-savedcmd_kbridge.ko := ld -r -EL  -maarch64elf -z noexecstack --no-warn-rwx-segments --build-id=sha1  -T /usr/src/linux-headers-7.0.0-38-generic/scripts/module.lds -o kbridge.ko kbridge.o kbridge.mod.o .module-common.o
