@@ -1,4 +1,5 @@
 obj-m += kbridge.o
+kbridge-objs := kbridge_main.o proc.o
 
 KDIR := /lib/modules/$(shell uname -r)/build
 PWD  := $(shell pwd)
