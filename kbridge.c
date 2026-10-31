@@ -91,7 +91,7 @@ static ssize_t kbridge_write(struct file* file, const char __user *buffer, size_
         return -ERESTARTSYS;
 
     size_t bytes_to_copy;
-    if (*offset < 0 || *offset >= length)
+    if (*offset < 0 || *offset >= DEVICE_BUFFER_SIZE)
 	{
 		mutex_unlock(&buffer_mtx);
 		return -ENOSPC;
