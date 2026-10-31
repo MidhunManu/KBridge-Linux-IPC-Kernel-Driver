@@ -58,16 +58,25 @@ static ssize_t kbridge_read(struct file *file, char __user *buffer, size_t lengt
     size_t bytes_to_copy;
 
     if (*offset < 0)
+	{
+		mutex_unlock(&buffer_mtx);
         return -EINVAL;
+	}
 
     if (*offset >= message_len)
+	{
+		mutex_unlock(&buffer_mtx);
         return 0;
+	}
 
     remaning = message_len - (size_t)* offset;
     bytes_to_copy = min(length, remaning);
 
     if (copy_to_user(buffer, device_buffer + *offset, bytes_to_copy))
+	{
+		mutex_unlock(&buffer_mtx);
         return -EFAULT;
+	}
 
     *offset += bytes_to_copy;
     mutex_unlock(&buffer_mtx);
@@ -83,7 +92,10 @@ static ssize_t kbridge_write(struct file* file, const char __user *buffer, size_
 
     size_t bytes_to_copy;
     if (*offset < 0 || *offset >= length)
-        return -ENOSPC;
+	{
+		mutex_unlock(&buffer_mtx);
+		return -ENOSPC;
+	}
 
 #ifdef DEBUG
     pr_info("write invoked");
@@ -91,7 +103,10 @@ static ssize_t kbridge_write(struct file* file, const char __user *buffer, size_
 
     bytes_to_copy = min(length, DEVICE_BUFFER_SIZE - (size_t) *offset);
     if (copy_from_user(device_buffer + (size_t) *offset, buffer, bytes_to_copy))
-        return -EFAULT;
+	{
+		mutex_unlock(&buffer_mtx);
+		return -EFAULT;
+	}
 
     *offset += bytes_to_copy;
     mutex_unlock(&buffer_mtx);
@@ -147,11 +162,11 @@ static int __init mod_init(void)
 
     return 0;
 
-err_cdev:
+  err_cdev:
     cdev_del(&char_dev);
-err_class:
+  err_class:
     class_destroy(device_class);
-err_unregister:
+  err_unregister:
     unregister_chrdev_region(device_no, 1);
 
     return ret;
@@ -164,7 +179,7 @@ static void __exit mod_exit(void)
 #endif
 
     device_destroy(device_class, device_no);
-    cdev_del(&char_dev);
+	p    cdev_del(&char_dev);
     class_destroy(device_class);
     unregister_chrdev_region(device_no, 1);
 	proc_remove(proc_file_entry);
