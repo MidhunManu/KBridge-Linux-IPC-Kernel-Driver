@@ -17,6 +17,9 @@ static void __exit mod_exit(void)
 #endif
 }
 
+module_init(mod_init);
+module_exit(mod_exit);
+
 MODULE_LICENSE("GPL");
 MODULE_AUTHOR("MidhunManu");
 MODULE_DESCRIPTION("An Inter Process Communication driver which enables processes in userspace to exchange information with each other.");
