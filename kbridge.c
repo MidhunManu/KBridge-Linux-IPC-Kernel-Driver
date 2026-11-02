@@ -1,3 +1,10 @@
+// SPDX-License-Identifier: GPL-3.0
+
+/*
+ * Copyright (C) 2026 Midhun Manu
+ * An Inter Process Communication driver which enables processes in userspace to exchange information with each other.
+ */
+
 #include <linux/init.h>
 #include <linux/module.h>
 
