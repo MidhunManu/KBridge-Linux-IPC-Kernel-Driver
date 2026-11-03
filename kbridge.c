@@ -73,7 +73,7 @@ static ssize_t kbridge_read(struct file *file, const char __user *buffer, size_t
     return bytes_to_copy;
 }
 
-static ssize_t kbridge_write(struct file* file, char __user *buffer, size_t length, loff_t *offset)
+static ssize_t kbridge_write(struct file* file, const char __user *buffer, size_t length, loff_t *offset)
 {
     if (mutex_lock_interruptible(&buffer_mtx))
         return -ERESTARTSYS;
