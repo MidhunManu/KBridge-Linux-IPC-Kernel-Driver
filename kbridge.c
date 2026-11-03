@@ -33,7 +33,7 @@ static int kbridge_open(struct inode *inode, struct file *file)
 
 static int kbridge_release(struct inode *inode, struct file *file)
 {
-#ifdef
+#ifdef DEBUG
     pr_info("kbridge driver closed\n");
 #endif
     return 0;
@@ -75,7 +75,7 @@ static ssize_t kbridge_read(struct file *file, char __user *buffer, size_t lengt
 
 ssize_t kbridge_write(struct file* file, char __user *buffer, size_t length, loff_t *offset)
 {
-    if (mutex_lock_uninterruptible(&buffer_mtx))
+    if (mutex_lock_interruptible(&buffer_mtx))
         return -ERESTARTSYS;
 
     size_t bytes_to_copy;
@@ -111,7 +111,7 @@ static int __init mod_init(void)
 #endif
 
     int ret;
-    ret = alloc_char_dev_region(&device_no, 0, 1, DEVICE_NAME);
+    ret = alloc_chrdev_region(&device_no, 0, 1, DEVICE_NAME);
     if (ret)
         return ret;
 
