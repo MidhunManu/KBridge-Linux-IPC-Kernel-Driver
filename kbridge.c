@@ -13,7 +13,7 @@
 #include <linux/uaccess.h>
 #include <linux/mutex.h>
 
-#define DEVICE_NAME "KBRIDGE"; 
+#define DEVICE_NAME "KBRIDGE"
 #define DEVICE_BUFFER_SIZE 1024
 
 static dev_t device_no;
