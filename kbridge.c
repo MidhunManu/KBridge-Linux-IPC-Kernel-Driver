@@ -39,7 +39,7 @@ static int kbridge_release(struct inode *inode, struct file *file)
     return 0;
 }
 
-static ssize_t kbridge_read(struct file *file, char __user *buffer, size_t length, loff_t *offset)
+static ssize_t kbridge_read(struct file *file, const char __user *buffer, size_t length, loff_t *offset)
 {
     if (device_buffer[0] == '\0')
         return -EAGAIN;
@@ -73,7 +73,7 @@ static ssize_t kbridge_read(struct file *file, char __user *buffer, size_t lengt
     return bytes_to_copy;
 }
 
-ssize_t kbridge_write(struct file* file, char __user *buffer, size_t length, loff_t *offset)
+static ssize_t kbridge_write(struct file* file, char __user *buffer, size_t length, loff_t *offset)
 {
     if (mutex_lock_interruptible(&buffer_mtx))
         return -ERESTARTSYS;
@@ -144,7 +144,7 @@ err_unregister:
     cdev_del(&char_dev);
 err_cdev:
     class_destroy(device_class);
-err_cdev:
+err_unregister:
     unregister_chrdev_region(device_no, 1);
 
     return ret;
