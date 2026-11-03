@@ -140,9 +140,9 @@ static int __init mod_init(void)
 
     return 0;
 
-err_unregister:
-    cdev_del(&char_dev);
 err_cdev:
+    cdev_del(&char_dev);
+err_class:
     class_destroy(device_class);
 err_unregister:
     unregister_chrdev_region(device_no, 1);
