@@ -39,7 +39,7 @@ static int kbridge_release(struct inode *inode, struct file *file)
     return 0;
 }
 
-static ssize_t kbridge_read(struct file *file, const char __user *buffer, size_t length, loff_t *offset)
+static ssize_t kbridge_read(struct file *file, char __user *buffer, size_t length, loff_t *offset)
 {
     if (device_buffer[0] == '\0')
         return -EAGAIN;
