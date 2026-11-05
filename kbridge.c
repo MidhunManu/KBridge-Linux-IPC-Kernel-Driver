@@ -13,6 +13,8 @@
 #include <linux/uaccess.h>
 #include <linux/mutex.h>
 
+#include "proc.h"
+
 #define DEVICE_NAME "KBRIDGE"
 #define DEVICE_BUFFER_SIZE 1024
 
@@ -69,6 +71,7 @@ static ssize_t kbridge_read(struct file *file, char __user *buffer, size_t lengt
 
     *offset += bytes_to_copy;
     mutex_unlock(&buffer_mtx);
+	++read_count;
 
     return bytes_to_copy;
 }
@@ -92,6 +95,7 @@ static ssize_t kbridge_write(struct file* file, const char __user *buffer, size_
 
     *offset += bytes_to_copy;
     mutex_unlock(&buffer_mtx);
+	++write_count;
 
     return bytes_to_copy;
 }
@@ -136,6 +140,9 @@ static int __init mod_init(void)
         goto err_cdev;
     }
 
+	proc_file_entry = proc_create(DEVICE_NAME, 0444, NULL, &dev_proc_ops);
+	
+	pr_info("proc file created\n");
     pr_info("device registered with major: %d and minor: %d\n", MAJOR(device_no), MINOR(device_no));
 
     return 0;
@@ -160,6 +167,7 @@ static void __exit mod_exit(void)
     cdev_del(&char_dev);
     class_destroy(device_class);
     unregister_chrdev_region(device_no, 1);
+	proc_remove(proc_file_entry);
 }
 
 module_init(mod_init);
